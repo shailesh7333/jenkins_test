@@ -1,20 +1,28 @@
 pipeline {
   agent any
   stages {
-    stage('Echo') {
+    stage('Log Tool Version') {
       parallel {
-        stage('Echo') {
+        stage('Log Tool Version') {
           steps {
-            echo 'Hello World'
+            sh '''mvn --version
+git --version
+java --version'''
           }
         }
 
-        stage('Echo2') {
+        stage('Check pom.xml file') {
           steps {
-            echo 'Hello World 1'
+            fileExists 'pom.xml'
           }
         }
 
+      }
+    }
+
+    stage('Post Build Steps') {
+      steps {
+        writeFile(file: 'completed.txt', text: 'It worked!')
       }
     }
 
